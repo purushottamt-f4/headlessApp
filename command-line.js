@@ -1,9 +1,42 @@
 import { createServer } from 'http';
-const arg = process.argv;
-console.log('------'+arg[2]);
-const ports=arg[2];
-createServer((req,resp)=>{
-resp.setHeader("content-type","application/json")
-resp.end("port is"+ports);
+import queryExe from './helper/dbconnection.js';
 
-}).listen(ports);
+const arg = process.argv;
+const port = arg[2];   // better naming
+
+console.log("Starting server on port:", port);
+
+// Function to get admin users
+async function getAdminUsers() {
+    const sql = "SELECT * FROM admin_user";
+    return await queryExe(sql, []);
+}
+
+// Create HTTP server
+createServer(async (req, resp) => {
+
+    try {
+        const data = await getAdminUsers();
+
+        // Set headers BEFORE sending any body
+        resp.setHeader("Content-Type", "application/json");
+
+        // Send JSON response
+        resp.write(JSON.stringify({
+            port: port,
+            users: data
+        }));
+
+        resp.end(); // END RESPONSE
+
+    } catch (error) {
+        console.error("Error:", error);
+
+        resp.statusCode = 500;
+        resp.setHeader("Content-Type", "text/plain");
+        resp.end("Internal Server Error");
+    }
+
+}).listen(port, () => {
+    console.log(`Server running on port ${port}`);
+});

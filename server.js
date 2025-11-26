@@ -36,6 +36,11 @@ createServer((req ,resp)=>{
   });
 
 }
+if(url == '/home'){
+resp.end('This Home page ');
+
+
+}
 
 // resp.write(`
 //     `+body+`
