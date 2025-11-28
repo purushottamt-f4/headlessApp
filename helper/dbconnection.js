@@ -8,7 +8,7 @@ const database = serverlessMysql({
   host     : 'localhost',
   user     : 'root',
   password : '123456',
-  database : 'magento2.4.5'
+  database : 'test'
 	}
 });
 
@@ -19,6 +19,7 @@ try {
       database.end();
       let data = JSON.parse(JSON.stringify(results));
 			resolve(data);
+      console.log('heres');
       console.log(data);
     })
     
