@@ -12,7 +12,7 @@ export default async function createJwtToken(payload) {
 
 export async function validateUserToken(token) {
   try {
-    const payload = jwt.verify(token, JWT_SECRET);
+    const payload = jwt.verify(token, process.env.JWT_SECRET);
     return payload;
   } catch (error) {
     return null;
